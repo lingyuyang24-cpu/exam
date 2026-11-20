@@ -13,7 +13,7 @@ from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from .config import Settings
+from .config import Settings, readable_error
 from .db import Store, now, uid
 from .files import UPLOAD_EXTENSIONS, safe_path, workspace_files
 from .runner import RunManager, TERMINAL
@@ -252,6 +252,14 @@ def create_app(settings=None):
         body = await request.body()
         if len(body) > 20*1024*1024:
             raise HTTPException(413, "Model request is too large")
+        if not request.headers.get("content-encoding"):
+            try:
+                payload = json.loads(body)
+                manager.emit(rid, "provider.request", {"endpoint": endpoint, "model": payload.get("model"),
+                    "tool_types": sorted({tool.get("type", "unknown") for tool in payload.get("tools", [])}),
+                    "tool_count": len(payload.get("tools", []))})
+            except (ValueError, TypeError, AttributeError):
+                pass
         headers = {"Authorization": f"Bearer {settings.api_key}", "Content-Type": "application/json"}
         for name in ["openai-beta", "x-codex-turn-metadata", "content-encoding"]:
             if value := request.headers.get(name):
@@ -265,8 +273,9 @@ def create_app(settings=None):
         if response.status_code >= 400:
             content = (await response.aread()).decode(errors="replace")
             await response.aclose()
-            manager.emit(rid, "error", {"message": f"模型服务返回 HTTP {response.status_code}：" + settings.redact(content)[:2000]})
-            return JSONResponse({"error": {"message": settings.redact(content)[:2000], "type": "upstream_error"}}, status_code=response.status_code)
+            message = settings.redact(readable_error(content))[:2000]
+            manager.emit(rid, "error", {"message": f"模型服务返回 HTTP {response.status_code}：" + message})
+            return JSONResponse({"error": {"message": message, "type": "upstream_error"}}, status_code=response.status_code)
 
         async def forward():
             try:

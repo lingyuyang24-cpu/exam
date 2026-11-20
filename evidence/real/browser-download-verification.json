@@ -1,0 +1,7 @@
+{
+  "browser": "in-app browser",
+  "action": "clicked actual artifact download link",
+  "matched_api_artifact": true,
+  "sha256": "86ad0675e739b12d718fd05da0f36e868dd3badd0bd883c0cce5a945def4f1a6",
+  "date": "2026-11-20"
+}

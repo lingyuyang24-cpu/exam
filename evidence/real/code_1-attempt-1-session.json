@@ -1,0 +1,55 @@
+{
+  "session": {
+    "id": "9e225973-292c-46ea-9cb5-2077e8fa79a3",
+    "title": "CSV 质检工具 · 开发演示",
+    "cli_session_id": "01a1f934-3eae-70f3-bfcc-9df0ac6e5323",
+    "created_at": "2026-11-20T13:45:12.885215+00:00",
+    "updated_at": "2026-11-20T13:55:13.500397+00:00"
+  },
+  "messages": [
+    {
+      "id": "47962aab-ba50-4379-8754-c74a76698cf3",
+      "session_id": "9e225973-292c-46ea-9cb5-2077e8fa79a3",
+      "run_id": "88f79345-31c1-4225-a575-2228d548510f",
+      "role": "user",
+      "content": "请在 project 目录开发一个 Python CSV 数据质量检查工具。支持输入 CSV 路径，检查每列缺失值和完整重复行（除首次出现外的重复行数），输出 JSON 报告。提供 README 和至少 4 个 unittest 测试，实际运行测试。只使用 Python 标准库，不安装依赖。",
+      "created_at": "2026-11-20T13:45:12.907301+00:00"
+    },
+    {
+      "id": "d9580122-1bf4-4ad7-83cc-081cd42123c2",
+      "session_id": "9e225973-292c-46ea-9cb5-2077e8fa79a3",
+      "run_id": "88f79345-31c1-4225-a575-2228d548510f",
+      "role": "assistant",
+      "content": "Now the CLI and package init:",
+      "created_at": "2026-11-20T13:55:13.487509+00:00"
+    }
+  ],
+  "runs": [
+    {
+      "id": "88f79345-31c1-4225-a575-2228d548510f",
+      "session_id": "9e225973-292c-46ea-9cb5-2077e8fa79a3",
+      "request_id": "recorded-demo-code_1",
+      "prompt": "请在 project 目录开发一个 Python CSV 数据质量检查工具。支持输入 CSV 路径，检查每列缺失值和完整重复行（除首次出现外的重复行数），输出 JSON 报告。提供 README 和至少 4 个 unittest 测试，实际运行测试。只使用 Python 标准库，不安装依赖。",
+      "status": "timed_out",
+      "created_at": "2026-11-20T13:45:12.907301+00:00",
+      "started_at": "2026-11-20T13:45:13.066030+00:00",
+      "finished_at": "2026-11-20T13:55:13.498943+00:00",
+      "exit_code": 0,
+      "error": "任务超过运行时限，已有文件已保留。",
+      "usage": null
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "5e79073d-49f3-4a76-bdad-b42f09361f67",
+      "session_id": "9e225973-292c-46ea-9cb5-2077e8fa79a3",
+      "run_id": "88f79345-31c1-4225-a575-2228d548510f",
+      "name": "成果.zip",
+      "relative_path": "sessions/9e225973-292c-46ea-9cb5-2077e8fa79a3/artifacts/88f79345-31c1-4225-a575-2228d548510f/成果.zip",
+      "size": 8130,
+      "sha256": "69adb4ee9986c44653e0e514f1eaacb76d56f4a70f05808cb76f8c98ce6b380e",
+      "partial": 1,
+      "created_at": "2026-11-20T13:55:13.495087+00:00"
+    }
+  ]
+}

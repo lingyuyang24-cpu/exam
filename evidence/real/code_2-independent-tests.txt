@@ -1,0 +1,53 @@
+WARNING: proceeding, even though we could not update PATH: Refusing to create helper binaries under temporary dir "/tmp" (codex_home: "/tmp/.codex")
+test_custom_na_values_and_header_handling (test_csv_qc.CheckCsvTest.test_custom_na_values_and_header_handling)
+自定义缺失标记与无表头模式应生效。 ... ok
+test_duplicate_rows_exclude_first_occurrence (test_csv_qc.CheckCsvTest.test_duplicate_rows_exclude_first_occurrence)
+重复行数 = 每组出现次数 - 1，首次出现不计入。 ... ok
+test_missing_file_raises (test_csv_qc.CheckCsvTest.test_missing_file_raises)
+文件不存在时抛出 FileNotFoundError。 ... ok
+test_missing_values_examples_and_kinds (test_csv_qc.CheckCsvTest.test_missing_values_examples_and_kinds)
+应记录缺失值写法分布与示例行号。 ... ok
+test_missing_values_per_column (test_csv_qc.CheckCsvTest.test_missing_values_per_column)
+每列缺失数量与缺失率应正确统计。 ... ok
+test_no_duplicates_and_no_missing (test_csv_qc.CheckCsvTest.test_no_duplicates_and_no_missing)
+干净文件应报告零缺失、零重复。 ... ok
+test_cli_missing_file_returns_error_code (test_csv_qc.CliTest.test_cli_missing_file_returns_error_code)
+文件不存在时退出码为 2。 ... 错误: CSV 文件不存在: /tmp/tmp99kskmrr/nope.csv
+ok
+test_cli_writes_json_file (test_csv_qc.CliTest.test_cli_writes_json_file)
+-o 应写出合法 JSON 文件并返回 0。 ... ok
+test_module_entry_point (test_csv_qc.CliTest.test_module_entry_point)
+python -m csv_qc 应输出 JSON 到标准输出。 ... ok
+test_cli_dedupe_output_flag (test_dedupe.DedupeTest.test_cli_dedupe_output_flag)
+CLI 的 --dedupe-output 应写出去重文件并在报告中给出统计。 ... ok
+test_cli_refuses_dedupe_output_over_input (test_dedupe.DedupeTest.test_cli_refuses_dedupe_output_over_input)
+CLI 指定输出等于输入时应报错并返回非 0 退出码。 ... 错误: 拒绝将去重结果写回输入文件: /tmp/tmpk9b8wl0s/data.csv 与 /tmp/tmpk9b8wl0s/data.csv 是同一个文件
+ok
+test_dedupe_empty_file (test_dedupe.DedupeTest.test_dedupe_empty_file)
+空文件去重应产出空文件且不报错。 ... ok
+test_dedupe_keeps_first_occurrence_and_full_row (test_dedupe.DedupeTest.test_dedupe_keeps_first_occurrence_and_full_row)
+去重应保留首个出现的完整行，且内容与原行一致。 ... ok
+test_dedupe_keeps_header_and_handles_no_header (test_dedupe.DedupeTest.test_dedupe_keeps_header_and_handles_no_header)
+无表头模式下去重结果不应多出表头行。 ... ok
+test_dedupe_preserves_first_row_not_merged_values (test_dedupe.DedupeTest.test_dedupe_preserves_first_row_not_merged_values)
+重复组应保留首次出现的整行，而不是各列首值拼成的行。 ... ok
+test_input_file_is_not_modified (test_dedupe.DedupeTest.test_input_file_is_not_modified)
+去重后原始输入文件内容必须保持不变。 ... ok
+test_missing_value_still_trims_whitespace (test_dedupe.DedupeTest.test_missing_value_still_trims_whitespace)
+缺失值判断仍然去除首尾空白，与去重口径不同。 ... ok
+test_refuse_write_back_to_input (test_dedupe.DedupeTest.test_refuse_write_back_to_input)
+输出与输入是同一文件时应拒绝写入。 ... ok
+test_refuse_write_back_via_symlink (test_dedupe.DedupeTest.test_refuse_write_back_via_symlink)
+输出是指向输入的软链接时同样应拒绝。 ... ok
+test_report_duplicate_count_matches_dedupe_output (test_dedupe.DedupeTest.test_report_duplicate_count_matches_dedupe_output)
+报告的重复行数必须与去重后去掉的行数一致。 ... ok
+test_whitespace_different_rows_are_not_duplicates (test_dedupe.DedupeTest.test_whitespace_different_rows_are_not_duplicates)
+空白字符不同的行不算重复，应全部保留。 ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.039s
+
+OK
+报告已写入 /tmp/tmph6opdhem/report.json: 3 行, 2 列, 缺失 1 个, 重复行 1 行
+报告已写入 /tmp/tmpq1s27hyc/report.json: 3 行, 2 列, 缺失 0 个, 重复行 1 行
+去重文件已写入 /tmp/tmpq1s27hyc/dedup.csv: 保留 2 行, 去掉 1 行

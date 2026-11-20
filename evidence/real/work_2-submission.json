@@ -1,0 +1,13 @@
+{
+  "id": "ecb67d97-2221-447c-88e4-1c9502a24396",
+  "session_id": "187c22c4-3bc6-4d75-a980-0f6d0b1d1e15",
+  "request_id": "recorded-demo-work_2-attempt-0",
+  "prompt": "将 report.md 和 summary.csv 改为只统计已完成订单，CSV 仍为 region,total_sales 两列。报告压缩为一页管理层摘要，保留总金额、区域金额、重要结论、负责人和期限。实际重新运行分析脚本并验证关键数字。",
+  "status": "queued",
+  "created_at": "2026-11-20T13:55:56.137358+00:00",
+  "started_at": null,
+  "finished_at": null,
+  "exit_code": null,
+  "error": null,
+  "usage": null
+}

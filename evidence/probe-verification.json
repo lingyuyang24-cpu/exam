@@ -1,0 +1,11 @@
+{
+  "source": "real Codex CLI + platform API",
+  "model": "linext-5.3-luna",
+  "run_id": "caf8ecf7-5fa0-4698-84b3-b906e0eed8d4",
+  "actual": {
+    "total": 15
+  },
+  "expected_total": 15,
+  "independent_check_passed": true,
+  "commands_completed": 6
+}

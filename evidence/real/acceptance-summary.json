@@ -1,0 +1,80 @@
+{
+  "date": "2026-11-20",
+  "engine": "real Codex CLI 0.114.0",
+  "model": "linext-5.3-luna",
+  "application_tests": 16,
+  "generated_tool_tests": {
+    "initial": 9,
+    "dedupe": 21
+  },
+  "successful_runs": {
+    "work_1": "07905cb3-3fa8-4a25-ae6f-e0ced18e5816",
+    "code_1": "fc3ebcaa-b297-4649-9a09-efaddd1016d4",
+    "work_2": "ecb67d97-2221-447c-88e4-1c9502a24396",
+    "code_2": "e5c51fbc-0c19-4134-9e8b-6dbda161e049"
+  },
+  "retained_timeout_attempts": {
+    "code_1": [
+      "88f79345-31c1-4225-a575-2228d548510f"
+    ],
+    "code_2": [
+      "a329f8dd-b851-48f8-a457-bf6c90a5fdf7"
+    ]
+  },
+  "cli_resume_verified": {
+    "code_1": true,
+    "code_2": true,
+    "work_2": true
+  },
+  "same_cli_thread_id_verified": true,
+  "parallel_execution_seconds": 308.849352,
+  "independent_verification": {
+    "code_1": {
+      "passed": true,
+      "checks": {
+        "missing_values_and_duplicate_count": true,
+        "input_unchanged": true
+      }
+    },
+    "code_2": {
+      "passed": true,
+      "checks": {
+        "missing_values_and_duplicate_count": true,
+        "input_unchanged": true,
+        "exact_dedupe_preserves_first_row_and_whitespace": true,
+        "dedupe_keeps_original_sha256": true,
+        "rejects_input_overwrite": true
+      }
+    },
+    "work_1": {
+      "passed": true,
+      "expected": {
+        "华东": "4040",
+        "华北": "4200",
+        "华南": "3680"
+      },
+      "actual": {
+        "华北": "4200",
+        "华东": "4040",
+        "华南": "3680"
+      },
+      "method": "independent Python Decimal aggregation"
+    },
+    "work_2": {
+      "passed": true,
+      "expected": {
+        "华东": "2760",
+        "华北": "4200",
+        "华南": "2560"
+      },
+      "actual": {
+        "华北": "4200",
+        "华东": "2760",
+        "华南": "2560"
+      },
+      "method": "independent Python Decimal aggregation"
+    }
+  },
+  "restart_persistence_passed": true,
+  "final_task_timeout_seconds": 1200
+}

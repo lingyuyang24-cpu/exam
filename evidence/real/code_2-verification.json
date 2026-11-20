@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": {
+    "missing_values_and_duplicate_count": true,
+    "input_unchanged": true,
+    "exact_dedupe_preserves_first_row_and_whitespace": true,
+    "dedupe_keeps_original_sha256": true,
+    "rejects_input_overwrite": true
+  }
+}

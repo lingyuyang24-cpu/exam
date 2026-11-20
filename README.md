@@ -2,7 +2,7 @@
 
 把 Agent CLI 的文件操作、代码执行与持续对话能力带到浏览器中。面向单用户本机使用，支持多个会话、材料上传、执行记录、成果下载，以及关闭页面后继续工作。
 
-![工作台桌面界面](evidence/screenshots/workbench-desktop.jpg)
+![工作台桌面界面](evidence/screenshots/06-final-code-delivery.jpg)
 
 **实现：React + FastAPI + SQLite + 真实 Codex CLI + Docker Compose。** 应用没有模拟模型回复的运行模式；未配置 API 时可浏览界面、管理会话和上传材料，但无法启动 Agent。
 
@@ -69,6 +69,8 @@ Enter 发送，Shift + Enter 换行，Cmd/Ctrl + K 新建会话。点击顶部�
 
 Codex 自定义 provider 需要 Responses 协议；“OpenAI-compatible”也可能只指 Chat Completions，不能据此判断兼容。接入时应实际验证读文件、执行命令、写结果、第二轮续接四个步骤。官方参考：[非交互模式](https://learn.chatgpt.com/docs/non-interactive-mode)、[provider 配置](https://learn.chatgpt.com/docs/config-file/config-reference)。
 
+本平台仅接受客户端执行的 `function/custom` 工具，因此 CLI 配置显式关闭托管网页搜索（`web_search = "disabled"`），保留本地命令、读写文件等工具。应用记录每次模型请求的工具类型和数量用于兼容性诊断，不记录完整模型请求或凭据。已使用平台模型完成真实 CSV 读取、Python 执行、JSON 生成和独立数字校验。
+
 真实平台密钥仅由服务端持有。每次执行向 CLI 分配短期本地代理 token，内部代理将模型请求转发给配置的上游；CLI 子进程使用环境变量白名单，shell 工具环境进一步排除代理 token。此措施减少密钥意外进入代码和输出的机会，不是抵御同 UID 恶意进程的安全边界。
 
 `.env`、运行数据、IDE 文件与依赖目录均被 Git 和 Docker 构建上下文排除。前端不接收密钥。公开证据仅收录脱敏的演示运行；禁止将临时考试凭据用于应用运行、联调和测试以外的用途。
@@ -78,14 +80,14 @@ Codex 自定义 provider 需要 Responses 协议；“OpenAI-compatible”也可
 | `AGENT_API_KEY` | 空 | 上游密钥，仅运行时注入 |
 | `AGENT_BASE_URL` | 空 | 上游 API 前缀 |
 | `AGENT_MODEL` | `linext-5.3-luna` | 平台可用模型 |
-| `TASK_TIMEOUT_SECONDS` | `600` | 单次任务时限 |
+| `TASK_TIMEOUT_SECONDS` | `1200` | 单次任务时限；可随时手动停止 |
 | `MAX_CONCURRENT_RUNS` | `2` | 全局并发数，允许 1–4 |
 | `AGENT_SANDBOX` | `workspace-write` | Codex 沙箱模式 |
 | `PORT` | `8080` | Compose 发布到本机的端口 |
 
 API 配置是否存在与是否兼容是不同状态。界面的“Agent 已就绪”表示已安装 CLI 且配置完整，首次实际任务才会验证上游鉴权和协议。
 
-## 架构和关键取舍
+## 架构
 
 ```mermaid
 flowchart LR
@@ -133,11 +135,24 @@ queued → running → succeeded / failed / cancelled / timed_out / interrupted
 
 ## 演示与验证
 
-演示材料在 [`demo/inputs`](demo/inputs)，四轮具体提示词和录屏顺序在 [`demo/prompts.md`](demo/prompts.md)。输入全部为虚构数据。
+演示材料在 [`demo/inputs`](demo/inputs)，四轮具体提示词和展示顺序在 [`demo/prompts.md`](demo/prompts.md)。输入全部为虚构数据。
 
 - **开发任务**：创建 CSV 数据质量工具并运行 unittest；第二轮增加去重输出，验证原文件不变。
 - **日常任务**：上传销售 CSV 和会议记录，生成报告和区域汇总；第二轮改为仅统计已完成订单，重算数字并精简报告。
 - **持续工作**：任务执行期间切换会话、刷新页面；完成后重启容器，检查历史与成果。
+
+已完成的真实运行证据：
+
+| 任务 | 结果 | 下载与核验 |
+|---|---|---|
+| CSV 质检工具 | 9 项生成测试在 Docker 沙箱中独立复测通过 | [代码成果](evidence/real/code_1-artifacts.zip)、[测试输出](evidence/real/code_1-independent-tests.txt) |
+| CSV 工具追加去重 | 21 项生成测试及精确去重、原文件保护断言独立通过 | [去重代码成果](evidence/real/code_2-artifacts.zip)、[独立验收](evidence/real/code_2-verification.json)、[测试输出](evidence/real/code_2-independent-tests.txt) |
+| 材料分析：全部订单 | 总金额 11920，三区域独立核验通过 | [第一版成果](evidence/real/work_1-artifacts.zip)、[核验](evidence/real/work_1-verification.json) |
+| 材料分析：仅已完成 | 总金额 9520，三区域独立核验通过 | [第二版成果](evidence/real/work_2-artifacts.zip)、[核验](evidence/real/work_2-verification.json) |
+
+代码开发与去重追加各有一次达到原 600 秒时限，已有代码、测试输出与部分成果均保留在 `evidence/real/code_*-attempt-1-*`。根据实际平台响应速度，最终默认时限调整为 1200 秒，仍可手动停止。两次均在原会话续接后成功完成核验与交付，历史超时未改写为成功。
+
+四轮最终成功任务、两次保留的超时记录、CLI 续接、多会话并行和重启校验汇总见 [acceptance-summary.json](evidence/real/acceptance-summary.json)。重启后，两会话全部消息、工作文件和 6 份成果 ZIP 的 SHA256 均一致。
 
 独立销售验证脚本不向 Agent 提供预期答案：
 
@@ -147,7 +162,7 @@ python demo/verify_sales.py --actual /path/to/first-round/summary.csv
 python demo/verify_sales.py --completed-only --actual /path/to/second-round/summary.csv
 ```
 
-运行实际演示后，可以从任务卡下载 JSON 执行记录，从成果面板下载 ZIP。验证证据说明在 [`evidence/verification.md`](evidence/verification.md)。其中会明确区分真实模型运行和测试替身；不会用测试替身证明模型接入成功。
+运行实际演示后，可以从任务卡下载 JSON 执行记录，从成果面板下载 ZIP。图文演示在 [`evidence/demo-walkthrough.md`](evidence/demo-walkthrough.md)，验证证据说明在 [`evidence/verification.md`](evidence/verification.md)。其中会明确区分真实模型运行和测试替身；不会用测试替身证明模型接入成功。
 
 也可用脚本通过真实应用 API 提交四轮任务、保存执行记录与成果、独立核对销售汇总：
 
@@ -155,7 +170,7 @@ python demo/verify_sales.py --completed-only --actual /path/to/second-round/summ
 python scripts/run_demo.py --url http://127.0.0.1:8080
 ```
 
-该脚本实际调用模型并消耗平台额度，只在配置有效且需要联调演示时运行。相同输出目录会复用任务 ID，避免重复提交；录屏仍需在浏览器中展示切换、刷新和后续交流。
+该脚本实际调用模型并消耗平台额度，只在配置有效且需要联调演示时运行。默认输出到 Git 忽略的 `evidence/private/latest-demo`，不复用仓库历史证据中的会话 ID；可通过 `--output` 指定其他新目录。相同输出目录会复用任务 ID，避免重复提交；浏览器演示还应展示切换、刷新和后续交流。若任务失败，先检查已保存记录，再显式运行 `--retry-failed` 续接；旧尝试的执行记录和部分成果会保留，不覆盖为成功。
 
 ## 开发与测试
 

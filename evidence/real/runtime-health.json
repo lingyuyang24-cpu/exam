@@ -1,0 +1,11 @@
+{
+  "date": "2026-11-20",
+  "health": {
+    "status": "ok",
+    "configured": true,
+    "cli_available": true
+  },
+  "cli_version": "codex-cli 0.114.0",
+  "running_runner_sha256": "cc76aac583c4977002128e79f5861e0fc46d7b0180446f056c3ff0cb0781c37f",
+  "source_matches_container": true
+}

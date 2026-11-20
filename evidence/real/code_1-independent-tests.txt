@@ -1,0 +1,26 @@
+WARNING: proceeding, even though we could not update PATH: Refusing to create helper binaries under temporary dir "/tmp" (codex_home: "/tmp/.codex")
+test_custom_na_values_and_header_handling (test_csv_qc.CheckCsvTest.test_custom_na_values_and_header_handling)
+自定义缺失标记与无表头模式应生效。 ... ok
+test_duplicate_rows_exclude_first_occurrence (test_csv_qc.CheckCsvTest.test_duplicate_rows_exclude_first_occurrence)
+重复行数 = 每组出现次数 - 1，首次出现不计入。 ... ok
+test_missing_file_raises (test_csv_qc.CheckCsvTest.test_missing_file_raises)
+文件不存在时抛出 FileNotFoundError。 ... ok
+test_missing_values_examples_and_kinds (test_csv_qc.CheckCsvTest.test_missing_values_examples_and_kinds)
+应记录缺失值写法分布与示例行号。 ... ok
+test_missing_values_per_column (test_csv_qc.CheckCsvTest.test_missing_values_per_column)
+每列缺失数量与缺失率应正确统计。 ... ok
+test_no_duplicates_and_no_missing (test_csv_qc.CheckCsvTest.test_no_duplicates_and_no_missing)
+干净文件应报告零缺失、零重复。 ... ok
+test_cli_missing_file_returns_error_code (test_csv_qc.CliTest.test_cli_missing_file_returns_error_code)
+文件不存在时退出码为 2。 ... 错误: CSV 文件不存在: /tmp/tmpjk5zyuwz/nope.csv
+ok
+test_cli_writes_json_file (test_csv_qc.CliTest.test_cli_writes_json_file)
+-o 应写出合法 JSON 文件并返回 0。 ... ok
+test_module_entry_point (test_csv_qc.CliTest.test_module_entry_point)
+python -m csv_qc 应输出 JSON 到标准输出。 ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.047s
+
+OK
+报告已写入 /tmp/tmp47_km6nm/report.json: 3 行, 2 列, 缺失 1 个, 重复行 1 行

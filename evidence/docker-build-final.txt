@@ -1,0 +1,79 @@
+ Image exam-app Building
+#1 [internal] load local bake definitions
+#1 reading from stdin 544B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.52kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:24-bookworm-slim@sha256:dc26ae92c9fb15cf6b1d63e20f0944b2efe0f115b20e00be48fb23fceb061c54
+#3 DONE 1.6s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 162B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 7.87kB done
+#5 DONE 0.0s
+
+#6 [frontend 1/7] FROM docker.io/library/node:24-bookworm-slim@sha256:dc26ae92c9fb15cf6b1d63e20f0944b2efe0f115b20e00be48fb23fceb061c54
+#6 resolve docker.io/library/node:24-bookworm-slim@sha256:dc26ae92c9fb15cf6b1d63e20f0944b2efe0f115b20e00be48fb23fceb061c54 0.0s done
+#6 DONE 0.0s
+
+#7 [stage-1 2/9] RUN apt-get update && apt-get install -y --no-install-recommends     python3 python3-venv git ca-certificates ripgrep     && rm -rf /var/lib/apt/lists/*     && npm install --global @openai/codex@0.114.0     && python3 -m venv /opt/venv
+#7 CACHED
+
+#8 [stage-1 3/9] WORKDIR /app
+#8 CACHED
+
+#9 [stage-1 4/9] COPY requirements.txt requirements.lock ./
+#9 CACHED
+
+#10 [stage-1 5/9] RUN pip install --no-cache-dir -r requirements.txt     && useradd --create-home --uid 10001 agent     && mkdir /data && chown agent:agent /data
+#10 CACHED
+
+#11 [frontend 2/7] WORKDIR /web
+#11 CACHED
+
+#12 [frontend 5/7] RUN pnpm install --frozen-lockfile
+#12 CACHED
+
+#13 [frontend 6/7] COPY frontend/ ./
+#13 CACHED
+
+#14 [frontend 3/7] RUN npm install --global pnpm@10.11.0
+#14 CACHED
+
+#15 [frontend 4/7] COPY frontend/package.json frontend/pnpm-lock.yaml ./
+#15 CACHED
+
+#16 [frontend 7/7] RUN pnpm build
+#16 CACHED
+
+#17 [stage-1 6/9] COPY backend/ ./backend/
+#17 DONE 0.0s
+
+#18 [stage-1 7/9] COPY --from=frontend /web/dist ./frontend/dist/
+#18 DONE 0.0s
+
+#19 [stage-1 8/9] COPY demo/ ./demo/
+#19 DONE 0.0s
+
+#20 [stage-1 9/9] COPY scripts/sandbox_probe.py ./scripts/sandbox_probe.py
+#20 DONE 0.0s
+
+#21 exporting to image
+#21 exporting layers 0.1s done
+#21 exporting manifest sha256:78ea6dbb988576fff2ad4fb9774e7deb86a0364eefc31638731a42b2a03e9c77 done
+#21 exporting config sha256:f3e0b19cc0db1c4879013c0a470c14f1256a5935e6e6027c69762d2d5ca0c179 0.0s done
+#21 exporting attestation manifest sha256:ce1fe0ef89e301532ec55685bd0e95eebfce12862bf8caaf69c324de8a8f0566 0.0s done
+#21 exporting manifest list sha256:066605dfefa61bc78bbd0e396af6ba00eb410072c27105203320449ad2b3a65c done
+#21 naming to docker.io/library/exam-app:latest done
+#21 unpacking to docker.io/library/exam-app:latest 0.0s done
+#21 DONE 0.2s
+
+#22 resolving provenance for metadata file
+#22 DONE 0.0s
+ Image exam-app Built

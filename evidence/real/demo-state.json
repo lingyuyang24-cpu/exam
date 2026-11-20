@@ -1,0 +1,116 @@
+{
+  "sessions": {
+    "code": "9e225973-292c-46ea-9cb5-2077e8fa79a3",
+    "work": "187c22c4-3bc6-4d75-a980-0f6d0b1d1e15"
+  },
+  "runs": {
+    "work_1": {
+      "id": "07905cb3-3fa8-4a25-ae6f-e0ced18e5816",
+      "session_id": "187c22c4-3bc6-4d75-a980-0f6d0b1d1e15",
+      "request_id": "recorded-demo-work_1",
+      "prompt": "请分析 uploads 中的销售数据和会议记录。第一版按全部订单统计，以数量乘单价为订单金额。在 outputs 生成 report.md 和 summary.csv。CSV 列固定为 region,total_sales，按区域汇总金额。报告包含区域销售额、产品排名、各订单状态金额、会议待办及待确认问题，注明材料来源与统计口径。使用 Python 计算并保留分析脚本，不要编造利润或取消原因。",
+      "status": "succeeded",
+      "created_at": "2026-11-20T13:45:12.913514+00:00",
+      "started_at": "2026-11-20T13:45:13.073296+00:00",
+      "finished_at": "2026-11-20T13:50:21.922648+00:00",
+      "exit_code": 0,
+      "error": null,
+      "usage": "{\"input_tokens\": 633620, \"cached_input_tokens\": 357797, \"output_tokens\": 23197}"
+    },
+    "code_1": {
+      "id": "fc3ebcaa-b297-4649-9a09-efaddd1016d4",
+      "session_id": "9e225973-292c-46ea-9cb5-2077e8fa79a3",
+      "request_id": "recorded-demo-code_1-attempt-1",
+      "prompt": "请在 project 目录开发一个 Python CSV 数据质量检查工具。支持输入 CSV 路径，检查每列缺失值和完整重复行（除首次出现外的重复行数），输出 JSON 报告。提供 README 和至少 4 个 unittest 测试，实际运行测试。只使用 Python 标准库，不安装依赖。 上次执行未正常结束，请先检查已有文件并接续完成。保持实现简洁，分多次短工具调用写文件，然后实际运行测试或计算。 采用最小实现：核心逻辑约 120 行以内，测试 4 至 6 项，README 40 行以内，不扩展额外功能。",
+      "status": "succeeded",
+      "created_at": "2026-11-20T13:55:50.275208+00:00",
+      "started_at": "2026-11-20T13:55:50.368425+00:00",
+      "finished_at": "2026-11-20T14:03:42.661926+00:00",
+      "exit_code": 0,
+      "error": null,
+      "usage": "{\"input_tokens\": 1177275, \"cached_input_tokens\": 719169, \"output_tokens\": 35199}"
+    },
+    "work_2": {
+      "id": "ecb67d97-2221-447c-88e4-1c9502a24396",
+      "session_id": "187c22c4-3bc6-4d75-a980-0f6d0b1d1e15",
+      "request_id": "recorded-demo-work_2-attempt-0",
+      "prompt": "将 report.md 和 summary.csv 改为只统计已完成订单，CSV 仍为 region,total_sales 两列。报告压缩为一页管理层摘要，保留总金额、区域金额、重要结论、负责人和期限。实际重新运行分析脚本并验证关键数字。",
+      "status": "succeeded",
+      "created_at": "2026-11-20T13:55:56.137358+00:00",
+      "started_at": "2026-11-20T13:55:56.338973+00:00",
+      "finished_at": "2026-11-20T14:03:32.280778+00:00",
+      "exit_code": 0,
+      "error": null,
+      "usage": "{\"input_tokens\": 1938021, \"cached_input_tokens\": 1200729, \"output_tokens\": 46806}"
+    },
+    "code_2": {
+      "id": "e5c51fbc-0c19-4134-9e8b-6dbda161e049",
+      "session_id": "9e225973-292c-46ea-9cb5-2077e8fa79a3",
+      "request_id": "recorded-demo-code_2-attempt-1",
+      "prompt": "在刚才的工具基础上增加 --dedupe-output 参数，把去重结果写入指定新文件，保留首个出现的完整行，保持原始输入不变。完整重复行按 CSV 解析后的原始字段逐一比较，空白字符不同不算重复；缺失值判断仍可去除首尾空白。报告的重复行数与去重输出必须一致。拒绝将去重结果写回输入文件。只做必要的局部修改，补充边界测试并运行全部测试，在回复中说明实际结果。 上次执行未正常结束，请先检查已有文件并接续完成。保持实现简洁，分多次短工具调用写文件，然后实际运行测试或计算。 若功能已经实现，只需核对现有代码、运行完整测试并更新 README 用法，然后简短总结结束；不要额外重构或扩展。",
+      "status": "succeeded",
+      "created_at": "2026-11-20T14:15:13.142556+00:00",
+      "started_at": "2026-11-20T14:15:13.229905+00:00",
+      "finished_at": "2026-11-20T14:20:25.382135+00:00",
+      "exit_code": 0,
+      "error": null,
+      "usage": "{\"input_tokens\": 2629385, \"cached_input_tokens\": 1635563, \"output_tokens\": 50993}"
+    }
+  },
+  "source": "real application API / real Codex CLI",
+  "config": {
+    "configured": true,
+    "model": "linext-5.3-luna",
+    "engine": "Codex CLI",
+    "cli_available": true,
+    "concurrency": 2,
+    "timeout_seconds": 1200,
+    "max_upload_bytes": 10485760,
+    "upload_extensions": [
+      ".css",
+      ".csv",
+      ".html",
+      ".js",
+      ".json",
+      ".log",
+      ".md",
+      ".py",
+      ".ts",
+      ".txt"
+    ],
+    "sandbox": "workspace-write"
+  },
+  "materials_uploaded": true,
+  "previous_attempts": {
+    "code_1": [
+      {
+        "id": "88f79345-31c1-4225-a575-2228d548510f",
+        "session_id": "9e225973-292c-46ea-9cb5-2077e8fa79a3",
+        "request_id": "recorded-demo-code_1",
+        "prompt": "请在 project 目录开发一个 Python CSV 数据质量检查工具。支持输入 CSV 路径，检查每列缺失值和完整重复行（除首次出现外的重复行数），输出 JSON 报告。提供 README 和至少 4 个 unittest 测试，实际运行测试。只使用 Python 标准库，不安装依赖。",
+        "status": "timed_out",
+        "created_at": "2026-11-20T13:45:12.907301+00:00",
+        "started_at": "2026-11-20T13:45:13.066030+00:00",
+        "finished_at": "2026-11-20T13:55:13.498943+00:00",
+        "exit_code": 0,
+        "error": "任务超过运行时限，已有文件已保留。",
+        "usage": null
+      }
+    ],
+    "code_2": [
+      {
+        "id": "a329f8dd-b851-48f8-a457-bf6c90a5fdf7",
+        "session_id": "9e225973-292c-46ea-9cb5-2077e8fa79a3",
+        "request_id": "recorded-demo-code_2-attempt-0",
+        "prompt": "在刚才的工具基础上增加 --dedupe-output 参数，把去重结果写入指定新文件，保留首个出现的完整行，保持原始输入不变。完整重复行按 CSV 解析后的原始字段逐一比较，空白字符不同不算重复；缺失值判断仍可去除首尾空白。报告的重复行数与去重输出必须一致。拒绝将去重结果写回输入文件。只做必要的局部修改，补充边界测试并运行全部测试，在回复中说明实际结果。",
+        "status": "timed_out",
+        "created_at": "2026-11-20T14:03:43.171034+00:00",
+        "started_at": "2026-11-20T14:03:43.373509+00:00",
+        "finished_at": "2026-11-20T14:13:43.803085+00:00",
+        "exit_code": 0,
+        "error": "任务超过运行时限，已有文件已保留。",
+        "usage": null
+      }
+    ]
+  }
+}

@@ -27,6 +27,8 @@ elif "case:missing-completion" in prompt:
 else:
     assert "AGENT_API_KEY" not in os.environ, "Upstream credentials leaked into child"
     emit("thread.started", thread_id="test-thread")
+    if "case:retry-recovered" in prompt:
+        emit("error", message="Reconnecting... 1/1 (synthetic stream disconnect)")
     emit("item.started", item={"id":"cmd-1","type":"command_execution","command":"python process-test.py","status":"in_progress"})
     if "case:slow" in prompt:
         time.sleep(1)

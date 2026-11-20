@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "expected": {
+    "华东": "4040",
+    "华北": "4200",
+    "华南": "3680"
+  },
+  "actual": {
+    "华北": "4200",
+    "华东": "4040",
+    "华南": "3680"
+  },
+  "method": "independent Python Decimal aggregation"
+}

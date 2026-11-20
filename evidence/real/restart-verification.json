@@ -1,0 +1,64 @@
+{
+  "passed": true,
+  "method": "Docker Compose restart; compare message hash, CLI session IDs, run statuses, every workspace file and artifact SHA256",
+  "sessions": {
+    "code": {
+      "session_id": "9e225973-292c-46ea-9cb5-2077e8fa79a3",
+      "cli_session_id": "01a1f934-3eae-70f3-bfcc-9df0ac6e5323",
+      "message_sha256": "dbfc3a334c64252f81d8b612272d233295e8a8349b9302f91f09bf20eb25b530",
+      "runs": {
+        "88f79345-31c1-4225-a575-2228d548510f": "timed_out",
+        "fc3ebcaa-b297-4649-9a09-efaddd1016d4": "succeeded",
+        "a329f8dd-b851-48f8-a457-bf6c90a5fdf7": "timed_out",
+        "e5c51fbc-0c19-4134-9e8b-6dbda161e049": "succeeded"
+      },
+      "artifacts": {
+        "312a2fbc-7882-4c1f-846e-3a247ab51a67": "ffb2b3d3272170e1ec5f82901ebf5540d94e4e7adb57ff3913fa91721de42dd7",
+        "513780fb-cb81-4765-8ca0-e186dfb3ff2e": "a14cfb7049853c991fce76c2851a5182b62c253c638605f6302689b446a61909",
+        "62b52ab2-b2c8-4adf-9906-45e3362c22a5": "68c031197cf40d18ccc9b39d33fe71fe8c3ace25288fdd5974ef9903f9a9cb33",
+        "5e79073d-49f3-4a76-bdad-b42f09361f67": "69adb4ee9986c44653e0e514f1eaacb76d56f4a70f05808cb76f8c98ce6b380e"
+      },
+      "files": {
+        "outputs/sample_dedup.csv": "d166805b0006da5ec9e0cd469ded09a2cedd39966185d4036684c9416c7bf839",
+        "outputs/sample_report.json": "28668ada37a40c5606ebf8e9b081ae2feff81c7c7f013dc3996010b4e4183166",
+        "outputs/summary.md": "7d7959647fd0929c3b94f9d7338ed9542112824d382fe022d126cd1e4539510c",
+        "project/README.md": "30ca1679299598f0a9a0d509f2f05a5012e884a21d226af31158a6b299378daf",
+        "project/csv_qc/__init__.py": "6e0ecd16e4b9154b80306c855e2e515efa2412b0ed12e5adf21e536abfdc1cdd",
+        "project/csv_qc/__main__.py": "cef42e9b1be22cc3ba084644ddbf6b1b30ea3a8ebab6b1bf2e6cca895a951351",
+        "project/csv_qc/cli.py": "52b76d16083d448c3418d2c31211816329525e9f2579d18e0294dbd8540e5365",
+        "project/csv_qc/core.py": "7e4a955707a95d6f7b4dfba104f0ea7e97e76f1a073aa07d0fe17b5d34609020",
+        "project/examples/sample.csv": "61e85141fc2e2f348c9b9aa27edaa72239931355d626a85876dd1322ee7f68e4",
+        "project/tests/test_csv_qc.py": "6ea63558356e50498b755e0b7419b33c068660e0104337a6b05cc76a3f8bc393",
+        "project/tests/test_dedupe.py": "07ac8d4beb8300e52ba78a91123baaa31732867540c87201face78631d2dfd30"
+      }
+    },
+    "work": {
+      "session_id": "187c22c4-3bc6-4d75-a980-0f6d0b1d1e15",
+      "cli_session_id": "01a1f934-3eae-7ba1-860b-1386affb72c6",
+      "message_sha256": "bab0f296479940bca09650748331945fbd43a741a40676ce4b14c791303f597b",
+      "runs": {
+        "07905cb3-3fa8-4a25-ae6f-e0ced18e5816": "succeeded",
+        "ecb67d97-2221-447c-88e4-1c9502a24396": "succeeded"
+      },
+      "artifacts": {
+        "ade7e634-d9e0-4b9d-bcbe-44cb5b8ddde2": "b62d5900f573955e6c643bafe0a980c3c27931053b913c2fa0891d12ecfb37d6",
+        "986156c4-f1b6-429a-894e-c25d4b394330": "86ad0675e739b12d718fd05da0f36e868dd3badd0bd883c0cce5a945def4f1a6"
+      },
+      "files": {
+        "outputs/report.md": "728f4c6a65ef5a61459d7a5715bb2c674e23286dd16e5864b7ed975a2ba781e6",
+        "outputs/report_detail.md": "5fa22a64cf7bcec3b888e3e3102cf912ef76b48267f3dff0aadea0b749be0baa",
+        "outputs/report_v1_all_orders.md": "352313734a9f9353296f57be802b87f3d336ba67b9fd9f66b07807e554057382",
+        "outputs/summary.csv": "ac9a31916c45353fc4366e89f2eddd991dcaacfc126ef5bb33ef004fb784fa09",
+        "outputs/summary_v1_all_orders.csv": "dd8e6f00fda80b1b7bc922b99b04ce13bd63e1a41822206a66e08304d0c2d297",
+        "project/analyze_sales.py": "02c9e91f3b03b08908251b648996446be41765a02537915b24e08af99a8128dc",
+        "uploads/5821dd10_meeting_notes.md": "038b40df5da4e364b457a1f40d97e98c809d75b004e75399c5b578ce1457f5e7",
+        "uploads/92e6e778_sales.csv": "d583bdc455d10dee144dcc87a803e3f8901fcb434dd23c3a35d59b44d75ba871"
+      }
+    }
+  },
+  "health": {
+    "status": "ok",
+    "configured": true,
+    "cli_available": true
+  }
+}

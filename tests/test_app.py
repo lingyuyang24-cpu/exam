@@ -107,6 +107,16 @@ def test_cancellation_stops_process(client):
     assert run["id"] not in client.app.state.manager.processes
 
 
+def test_recovered_stream_retry_can_complete(client):
+    sid=session(client)
+    run=send(client,sid,"case:retry-recovered").json()
+    result=finished(client,run["id"])
+    assert result["status"]=="succeeded"
+    assert result["error"] is None
+    trace=client.get(f'/api/runs/{run["id"]}/trace').json()
+    assert any(e['type']=='error' and 'Reconnecting' in e['payload']['message'] for e in trace['events'])
+
+
 def test_timeout(client):
     sid=session(client)
     run=send(client,sid,"case:hang").json()
@@ -181,12 +191,15 @@ def test_unconfigured_service_does_not_fake_a_run(tmp_path):
 
 
 def test_proxy_streams_and_adds_only_server_credential(client,settings):
+    sid=session(client)
+    run=send(client,sid).json()
+    finished(client,run['id'])
     observed=[]
     async def upstream(request):
         observed.append(request)
         return httpx.Response(200,headers={"content-type":"text/event-stream"},content=b'data: {"type":"response.completed"}\n\n')
     client.app.state.http=httpx.AsyncClient(transport=httpx.MockTransport(upstream))
-    client.app.state.manager.tokens["test-proxy-token"]="not-a-real-run"
+    client.app.state.manager.tokens["test-proxy-token"]=run['id']
     response=client.post('/internal/model/v1/responses',json={"model":"test","stream":True},headers={"Authorization":"Bearer test-proxy-token"})
     assert response.status_code==200
     assert 'response.completed' in response.text
@@ -205,3 +218,20 @@ def test_cli_receives_proxy_token_but_not_provider_key(client,settings):
     assert settings.api_key not in (root/'agent-home/config.toml').read_text()
     assert env['AGENT_SESSION_TOKEN']=="short-lived-token"
     assert args[-1]=='-'
+
+
+def test_provider_errors_are_readable_and_redacted(client, settings):
+    sid=session(client)
+    run=send(client,sid).json()
+    finished(client,run['id'])
+    async def upstream(request):
+        return httpx.Response(401,json={'error':{'message':'Invalid key '+settings.api_key}})
+    client.app.state.http=httpx.AsyncClient(transport=httpx.MockTransport(upstream))
+    client.app.state.manager.tokens['error-test-token']=run['id']
+    response=client.post('/internal/model/v1/responses',json={},headers={'Authorization':'Bearer error-test-token'})
+    assert response.status_code==401
+    assert response.json()['error']['message']=='Invalid key [REDACTED]'
+    assert settings.api_key not in response.text
+    from backend.config import readable_error
+    nested=json.dumps({'error':{'message':json.dumps({'error':{'message':'仅支持客户端工具'}})}})
+    assert readable_error(nested)=='仅支持客户端工具'
