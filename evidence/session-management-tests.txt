@@ -1,0 +1,15 @@
+Command: .venv/bin/python -m pytest -q
+Date: 2026-11-20
+Working directory: /Users/apple/Desktop/exam
+
+20 passed, 1 warning in 12.86s
+
+Warning: Starlette TestClient uses deprecated anyio.abc.BlockingPortal alias.
+Tests use the explicit fake CLI process fixture; no model API was called.
+
+New coverage:
+- Delete/restore preserves messages, CLI thread, uploaded material and artifact bytes.
+- Deleted sessions reject detail, run, file, artifact and mutation access until restored.
+- Recovery state survives application restart and resumed work succeeds.
+- Queued and running sessions reject deletion with HTTP 409.
+- Existing database schema migrates without losing records or CLI thread IDs.

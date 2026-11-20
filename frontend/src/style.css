@@ -7,14 +7,16 @@
     "PingFang SC",
     "Microsoft YaHei",
     sans-serif;
-  color: #202737;
+  color: var(--text);
   background: #f8f9fc;
   font-synthesis: none;
   font-size: 16px;
   font-weight: 400;
   font-synthesis: none;
   -webkit-font-smoothing: antialiased;
-  --muted: #838b9b;
+  --muted: #56647a;
+  --text: #172033;
+  --text-secondary: #36445b;
   --line: #e9ecf2;
   --accent: #485edb;
   --sidebar: #171e2b;
@@ -128,7 +130,7 @@ button .spin {
   font-size: 9px;
   letter-spacing: 1px;
   font-weight: 600;
-  color: #95a2b6;
+  color: #b8c5d8;
   border: 1px solid #3c4555;
   padding: 3px 4px;
   border-radius: 4px;
@@ -163,7 +165,7 @@ button .spin {
   align-items: center;
   gap: 9px;
   margin: 22px 9px 28px;
-  color: #69768b;
+  color: #b8c5d8;
 }
 .search input {
   width: 100%;
@@ -173,13 +175,13 @@ button .spin {
   font-size: 13px;
 }
 .search input::placeholder {
-  color: #78859a;
+  color: #b8c5d8;
 }
 .sidebar-section {
   padding: 0 12px;
   display: flex;
   justify-content: space-between;
-  color: #7d899e;
+  color: #b8c5d8;
   font-size: 12px;
   margin-bottom: 10px;
 }
@@ -202,7 +204,7 @@ button .spin {
   border-radius: 8px;
   margin-bottom: 5px;
   min-width: 0;
-  color: #8d9ab0;
+  color: #b8c5d8;
 }
 .session > svg {
   margin-top: 2px;
@@ -213,16 +215,16 @@ button .spin {
 }
 .session strong {
   display: block;
-  font-weight: 450;
+  font-weight: 500;
   font-size: 14px;
-  color: #bec7d8;
+  color: #e4ebf5;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .session span {
   display: block;
-  color: #738097;
+  color: #b8c5d8;
   font-size: 11px;
   margin-top: 7px;
   overflow: hidden;
@@ -240,11 +242,11 @@ button .spin {
   color: #f2f5fc;
 }
 .session.selected span {
-  color: #91a0b4;
+  color: #b8c5d8;
 }
 .sidebar-empty {
   font-size: 13px;
-  color: #8d9ab0;
+  color: #b8c5d8;
   padding: 15px;
 }
 .sidebar-bottom {
@@ -281,11 +283,11 @@ button .spin {
 .workspace-label div > span {
   display: block;
   font-size: 10px;
-  color: #7d8ba1;
+  color: #b8c5d8;
   margin-top: 5px;
 }
 .workspace-label .icon-button {
-  color: #8d9ab0;
+  color: #b8c5d8;
   width: 25px;
 }
 .workspace-label .icon-button:hover {
@@ -317,12 +319,12 @@ button .spin {
   min-width: 0;
 }
 .breadcrumb {
-  color: #89909e;
+  color: var(--muted);
   font-size: 12px;
   white-space: nowrap;
 }
 .slash {
-  color: #c6cbd4;
+  color: var(--muted);
   font-size: 13px;
 }
 .session-title {
@@ -338,7 +340,7 @@ button .spin {
   max-width: 250px;
 }
 .session-title svg {
-  color: #a0a8b4;
+  color: var(--muted);
   opacity: 0;
 }
 .session-title:hover svg {
@@ -364,7 +366,7 @@ button .spin {
   padding: 5px 9px;
   border-radius: 20px;
   font-size: 11px;
-  color: #8a7650;
+  color: #775522;
   white-space: nowrap;
 }
 .connection > span {
@@ -376,7 +378,7 @@ button .spin {
 .connection.ready {
   background: #eef7f0;
   border-color: #dcece0;
-  color: #54755e;
+  color: #315e3e;
 }
 .connection.ready > span {
   background: #70a97d;
@@ -394,7 +396,7 @@ button .spin {
   height: 30px;
   padding: 0;
   border-radius: 6px;
-  color: #8590a1;
+  color: var(--muted);
 }
 .icon-button:hover {
   background: #edf0f6;
@@ -444,7 +446,7 @@ button .spin {
 .eyebrow {
   font-size: 12px;
   letter-spacing: 2px;
-  color: #8a91a1;
+  color: var(--muted);
   margin-bottom: 14px;
 }
 .welcome h1 {
@@ -453,12 +455,12 @@ button .spin {
   line-height: 1.35;
   font-weight: 600;
   margin: 0 0 15px;
-  color: #252c3c;
+  color: var(--text);
 }
 .welcome-subtitle {
   font-size: 14px;
   line-height: 1.9;
-  color: #8a91a0;
+  color: var(--muted);
   margin: 0;
 }
 .small-break {
@@ -506,14 +508,14 @@ button .spin {
 }
 .starter-card p {
   font-size: 12px;
-  color: #89909e;
+  color: var(--muted);
   line-height: 1.9;
   margin: 0;
   min-height: 44px;
 }
 .starter-card > span {
   font-size: 11px;
-  color: #818a9e;
+  color: var(--muted);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -525,7 +527,7 @@ button .spin {
   display: flex;
   align-items: center;
   gap: 7px;
-  color: #a1a8b5;
+  color: var(--muted);
   font-size: 11px;
   margin-top: 23px;
 }
@@ -558,10 +560,10 @@ button .spin {
   padding: 18px 19px 8px;
   font-size: 14px;
   line-height: 1.75;
-  color: #35415a;
+  color: var(--text);
 }
 .composer textarea::placeholder {
-  color: #a0a7b4;
+  color: var(--muted);
 }
 .composer-toolbar {
   display: flex;
@@ -583,12 +585,12 @@ button .spin {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #939ba9;
+  color: var(--muted);
   font-size: 11px;
   padding: 5px 0;
 }
 .model-icon {
-  color: #8792ac;
+  color: var(--muted);
   font-size: 16px;
 }
 .send-button {
@@ -607,7 +609,7 @@ button .spin {
 }
 .send-button:disabled {
   background: #e8ecf2;
-  color: #9aa4b4;
+  color: var(--muted);
   opacity: 1;
 }
 .stop-button {
@@ -625,7 +627,7 @@ button .spin {
   display: flex;
   justify-content: space-between;
   font-size: 10px;
-  color: #a5acb9;
+  color: var(--muted);
   margin-top: 12px;
   padding: 0 2px;
 }
@@ -634,12 +636,12 @@ button .spin {
   align-items: center;
   gap: 6px;
   font-size: 11px;
-  color: #939baa;
+  color: var(--muted);
   margin: 0 2px 10px;
 }
 .attached-summary button {
   margin-left: auto;
-  color: #7788b7;
+  color: #315b94;
   font-size: 11px;
 }
 .error-banner {
@@ -659,7 +661,7 @@ button .spin {
   flex: 1;
 }
 .error-banner .icon-button {
-  color: #a16a5f;
+  color: #984732;
 }
 .messages {
   max-width: 800px;
@@ -685,7 +687,7 @@ button .spin {
 }
 .assistant .message-avatar {
   background: #e8eee9;
-  color: #597963;
+  color: #315e3e;
 }
 .message-content {
   min-width: 0;
@@ -703,13 +705,13 @@ button .spin {
 }
 .message-meta time {
   font-size: 10px;
-  color: #afb5c0;
+  color: var(--muted);
 }
 .assistant-label {
   border: 1px solid #e1e6ed;
   border-radius: 4px;
   font-size: 9px;
-  color: #9ba4b3;
+  color: var(--muted);
   padding: 2px 4px;
   font-weight: 400;
 }
@@ -717,7 +719,7 @@ button .spin {
   font-size: 14px;
   line-height: 1.9;
   white-space: pre-wrap;
-  color: #3c4556;
+  color: var(--text);
 }
 .message.live {
   margin-top: 24px;
@@ -725,7 +727,7 @@ button .spin {
 .markdown {
   font-size: 14px;
   line-height: 1.9;
-  color: #424c5e;
+  color: var(--text);
   overflow-wrap: anywhere;
 }
 .markdown > :first-child {
@@ -750,7 +752,7 @@ button .spin {
 .markdown h2,
 .markdown h3 {
   font-weight: 600;
-  color: #293448;
+  color: var(--text);
   line-height: 1.6;
   margin: 22px 0 10px;
 }
@@ -802,7 +804,7 @@ button .spin {
   border-left: 3px solid #c5cfe6;
   margin: 15px 0;
   padding: 2px 14px;
-  color: #7a889f;
+  color: var(--muted);
 }
 .markdown hr {
   border: 0;
@@ -821,17 +823,17 @@ button .spin {
   align-items: center;
   gap: 8px;
   padding: 12px 13px;
-  color: #7e8b9e;
+  color: var(--muted);
   font-size: 11px;
   text-align: left;
 }
 .trace-heading strong {
   font-weight: 500;
-  color: #667586;
+  color: var(--text-secondary);
   white-space: nowrap;
 }
 .trace-heading > span {
-  color: #a3aab7;
+  color: var(--muted);
 }
 .trace-heading .elapsed {
   margin-left: auto;
@@ -844,14 +846,14 @@ button .spin {
   margin-left: 0;
 }
 .status-succeeded .trace-heading > svg:first-child {
-  color: #70a385;
+  color: #2e7449;
 }
 .status-running .trace-heading > svg:first-child {
   color: #6982d9;
 }
 .status-failed .trace-heading > svg:first-child,
 .status-timed_out .trace-heading > svg:first-child {
-  color: #ba7a64;
+  color: #984732;
 }
 .trace-body {
   padding: 0 13px 10px;
@@ -866,7 +868,7 @@ button .spin {
   cursor: pointer;
   padding: 10px 0;
   font-size: 10px;
-  color: #8d98aa;
+  color: var(--muted);
   list-style: none;
 }
 .command-detail summary code {
@@ -874,7 +876,7 @@ button .spin {
   text-overflow: ellipsis;
   white-space: nowrap;
   flex: 1;
-  color: #6f7e93;
+  color: var(--text-secondary);
   font-size: 10px;
 }
 .command-detail summary > span {
@@ -882,10 +884,10 @@ button .spin {
   font-size: 9px;
 }
 .command-detail summary .exit-ok {
-  color: #6c9b7e;
+  color: #2e7449;
 }
 .command-detail summary .exit-failed {
-  color: #c17562;
+  color: #984732;
 }
 .command-detail pre,
 .diagnostics {
@@ -893,7 +895,7 @@ button .spin {
   line-height: 1.7;
   max-height: 260px;
   overflow: auto;
-  color: #7f8da2;
+  color: var(--muted);
   background: #f6f8fb;
   padding: 10px;
   border-radius: 6px;
@@ -905,7 +907,7 @@ button .spin {
   gap: 10px;
   padding: 7px 0 0;
   font-size: 10px;
-  color: #8b98b0;
+  color: var(--muted);
 }
 .trace-footer a {
   display: flex;
@@ -914,12 +916,12 @@ button .spin {
 }
 .trace-footer button {
   font-size: 10px;
-  color: #9a91a0;
+  color: var(--muted);
   padding: 0;
 }
 .trace-empty {
   font-size: 11px;
-  color: #a2acba;
+  color: var(--muted);
   margin: 1px 0 10px;
 }
 .run-error {
@@ -928,7 +930,7 @@ button .spin {
   padding: 0 13px 12px;
   font-size: 11px;
   line-height: 1.7;
-  color: #b97865;
+  color: #984732;
   overflow-wrap: anywhere;
 }
 .run-error svg {
@@ -940,13 +942,13 @@ button .spin {
   gap: 6px;
   font-size: 10px;
   line-height: 1.8;
-  color: #8797ac;
+  color: var(--muted);
   margin: 8px 0;
   overflow-wrap: anywhere;
 }
 .plan-list {
   font-size: 11px;
-  color: #8390a3;
+  color: var(--muted);
   margin: 0 0 10px;
 }
 .plan-list > div {
@@ -981,16 +983,16 @@ button .spin {
   display: flex;
   align-items: center;
   gap: 9px;
-  color: #8d98a8;
+  color: var(--muted);
 }
 .panel-heading h2 {
   font-size: 13px;
   font-weight: 550;
   margin: 0;
-  color: #424c5d;
+  color: var(--text-secondary);
 }
 .panel-heading .icon-button {
-  color: #b4bcc8;
+  color: var(--muted);
 }
 .panel-tabs {
   display: flex;
@@ -1003,20 +1005,20 @@ button .spin {
   align-items: center;
   gap: 7px;
   font-size: 12px;
-  color: #a4acb8;
+  color: var(--muted);
   padding: 5px 1px 13px;
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
 }
 .panel-tabs > button.active {
-  color: #445473;
+  color: var(--text-secondary);
   border-color: #657bca;
   font-weight: 500;
 }
 .panel-tabs button span {
   font-size: 10px;
   background: #f1f3f7;
-  color: #a0a9b8;
+  color: var(--muted);
   border-radius: 4px;
   padding: 1px 5px;
 }
@@ -1041,18 +1043,18 @@ button .spin {
   background: #f8faff;
 }
 .upload-symbol {
-  color: #91a3be;
+  color: var(--muted);
   margin-bottom: 1px;
 }
 .upload-zone strong {
   font-size: 12px;
-  font-weight: 450;
-  color: #7f8ba1;
+  font-weight: 500;
+  color: var(--muted);
 }
 .upload-zone > span {
   font-size: 10px;
   letter-spacing: -0.2px;
-  color: #abb4c2;
+  color: var(--muted);
   white-space: nowrap;
 }
 .files-empty {
@@ -1061,18 +1063,18 @@ button .spin {
   align-items: center;
   text-align: center;
   margin-top: 65px;
-  color: #b2bece;
+  color: var(--muted);
 }
 .files-empty > strong {
   font-size: 12px;
-  font-weight: 450;
-  color: #8995a8;
+  font-weight: 500;
+  color: var(--muted);
   margin-top: 20px;
 }
 .files-empty > p {
   font-size: 11px;
   line-height: 1.9;
-  color: #b0b8c4;
+  color: var(--muted);
   margin-top: 10px;
 }
 .empty-file-illustration {
@@ -1105,7 +1107,7 @@ button .spin {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  color: #adb7c6;
+  color: var(--muted);
   font-size: 10px;
   padding: 21px 0;
   border-top: 1px solid #f2f4f7;
@@ -1115,7 +1117,7 @@ button .spin {
 }
 .file-group h3 {
   font-size: 10px;
-  color: #a1abb9;
+  color: var(--muted);
   font-weight: 400;
   display: flex;
   align-items: center;
@@ -1151,7 +1153,7 @@ button .spin {
 .file-type.code {
   background: #f1eef9;
   border-color: #eae5f6;
-  color: #9b8dbd;
+  color: #68528e;
 }
 .file-row > div:nth-child(2) {
   min-width: 0;
@@ -1161,7 +1163,7 @@ button .spin {
   display: block;
   font-size: 11px;
   font-weight: 500;
-  color: #68778d;
+  color: var(--text-secondary);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -1169,14 +1171,14 @@ button .spin {
 .file-row span {
   display: block;
   font-size: 9px;
-  color: #aab4c2;
+  color: var(--muted);
   margin-top: 5px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 .file-row > svg {
-  color: #c7cfda;
+  color: var(--muted);
 }
 .artifact-card {
   border: 1px solid #e6eaf1;
@@ -1191,11 +1193,11 @@ button .spin {
 .artifact-card > strong {
   font-size: 12px;
   font-weight: 500;
-  color: #6e7c93;
+  color: var(--text-secondary);
 }
 .artifact-card > p {
   font-size: 10px;
-  color: #a6b0bf;
+  color: var(--muted);
   margin: 8px 0 16px;
 }
 .artifact-card > a {
@@ -1206,7 +1208,7 @@ button .spin {
   padding: 9px;
   border: 1px solid #e2e7f1;
   border-radius: 6px;
-  color: #7388af;
+  color: #315b94;
   background: #f8fafe;
   font-size: 11px;
 }
@@ -1216,7 +1218,7 @@ button .spin {
 .artifact-hash {
   display: block;
   font-size: 9px;
-  color: #b4bdca;
+  color: var(--muted);
   margin-top: 12px;
   text-align: center;
   font-family: monospace;
@@ -1272,17 +1274,17 @@ button .spin {
   align-items: center;
   gap: 12px;
   min-width: 0;
-  color: #7f8ba1;
+  color: var(--muted);
 }
 .preview-modal > header strong {
-  color: #465772;
+  color: var(--text-secondary);
   font-size: 13px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .preview-modal > header span {
   font-size: 11px;
-  color: #a6b1c1;
+  color: var(--muted);
   white-space: nowrap;
 }
 .text-button {
@@ -1290,7 +1292,7 @@ button .spin {
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  color: #6f84ad;
+  color: #315b94;
   white-space: nowrap;
 }
 .preview-body {
@@ -1302,16 +1304,16 @@ button .spin {
   margin: 0;
   font-size: 12px;
   line-height: 1.9;
-  color: #61748c;
+  color: var(--text-secondary);
 }
 .preview-modal > footer {
   font-size: 10px;
-  color: #a4afbf;
+  color: var(--muted);
   padding: 12px 25px;
   border-top: 1px solid #eff2f6;
 }
 .preview-notice {
-  color: #a28861;
+  color: #775522;
   font-size: 12px;
 }
 .settings-modal {
@@ -1341,7 +1343,7 @@ button .spin {
   padding: 16px;
   background: #fbf7f0;
   border-radius: 8px;
-  color: #b49764;
+  color: #775522;
   margin-top: 22px;
 }
 .config-state > svg {
@@ -1350,23 +1352,23 @@ button .spin {
 .config-state strong {
   font-size: 13px;
   font-weight: 550;
-  color: #9b8154;
+  color: #775522;
 }
 .config-state p {
   font-size: 11px;
   line-height: 1.8;
-  color: #ae9a7d;
+  color: #735f42;
   margin: 6px 0 0;
 }
 .config-state.configured {
   background: #f0f7f1;
-  color: #7a9f85;
+  color: #315e3e;
 }
 .configured strong {
-  color: #65846e;
+  color: #315e3e;
 }
 .configured p {
-  color: #8ca394;
+  color: #45604d;
 }
 .settings-modal dl {
   font-size: 12px;
@@ -1379,10 +1381,10 @@ button .spin {
   gap: 20px;
 }
 .settings-modal dt {
-  color: #9aa6b8;
+  color: var(--muted);
 }
 .settings-modal dd {
-  color: #687a96;
+  color: var(--text-secondary);
   margin: 0;
   text-align: right;
 }
@@ -1393,12 +1395,12 @@ button .spin {
   padding: 13px;
   line-height: 1.9;
   border-radius: 7px;
-  color: #8797af;
+  color: var(--muted);
 }
 .settings-note {
   font-size: 11px;
   line-height: 1.9;
-  color: #a1adbd;
+  color: var(--muted);
 }
 .settings-done {
   display: block;
@@ -1822,34 +1824,214 @@ button .spin {
 }
 .welcome-subtitle,
 .starter-card p {
-  color: #727d90;
+  color: var(--muted);
 }
 .eyebrow,
 .welcome-note {
-  color: #818da0;
+  color: var(--muted);
 }
 .composer textarea::placeholder {
-  color: #8c97a8;
+  color: var(--muted);
 }
 .file-row strong {
-  color: #52627b;
+  color: var(--text-secondary);
 }
 .files-empty > p {
-  color: #8e9bad;
+  color: var(--muted);
 }
 .upload-zone strong {
-  color: #687b98;
+  color: var(--muted);
 }
 .panel-footer {
-  color: #8c9ab0;
+  color: var(--muted);
 }
 .composer-caption {
-  color: #8c98aa;
+  color: var(--muted);
 }
 @media (prefers-reduced-motion: reduce) {
   * {
     scroll-behavior: auto !important;
     animation: none !important;
     transition: none !important;
+  }
+}
+
+/* Reversible session deletion, with visible keyboard/touch controls. */
+.session-row {
+  position: relative;
+  margin-bottom: 5px;
+}
+.session-row .session {
+  margin-bottom: 0;
+  padding-right: 43px;
+}
+.session-delete {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  color: #c3cee0;
+  opacity: 0;
+}
+.session-row:hover .session-delete,
+.session-row:focus-within .session-delete,
+.session-row.selected .session-delete {
+  opacity: 1;
+}
+.session-delete:hover:not(:disabled) {
+  color: #ffe1df;
+  background: #69383d;
+}
+.session-delete:disabled {
+  cursor: not-allowed;
+  color: #8795ab;
+}
+.trash-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 9px;
+  margin: -8px 0 17px;
+  border-radius: 7px;
+  text-align: left;
+  font-size: 14px;
+  color: #c5d0e2;
+}
+.trash-link:hover {
+  background: #293343;
+  color: #fff;
+}
+.session-dialog {
+  width: min(510px, calc(100vw - 32px));
+  max-height: min(80vh, 650px);
+  margin: auto;
+  padding: 0;
+  border: 1px solid #dfe4ed;
+  border-radius: 16px;
+  box-shadow: 0 24px 90px #111c3440;
+  color: var(--text);
+  background: #fff;
+}
+.session-dialog::backdrop {
+  background: #17243970;
+  backdrop-filter: blur(3px);
+}
+.session-dialog-content {
+  padding: 26px;
+}
+.session-dialog header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.session-dialog h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 650;
+}
+.session-dialog p {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+.session-dialog .delete-session-name {
+  font-weight: 600;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.session-dialog .dialog-note {
+  font-size: 14px;
+  color: var(--muted);
+}
+.session-dialog .dialog-error {
+  font-size: 14px;
+  color: #a43431;
+  background: #fff1ef;
+  padding: 10px 12px;
+  border-radius: 7px;
+}
+.dialog-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 25px;
+}
+.dialog-actions button {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.dialog-cancel {
+  background: #eef1f6;
+  color: var(--text-secondary);
+}
+.dialog-cancel:hover {
+  background: #e2e8f0;
+}
+.dialog-danger {
+  color: #fff;
+  background: #b33432;
+}
+.dialog-danger:hover:not(:disabled) {
+  background: #902a29;
+}
+.deleted-session-list {
+  list-style: none;
+  margin: 22px 0 0;
+  padding: 0;
+}
+.deleted-session-list li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 15px 0;
+  border-top: 1px solid var(--line);
+}
+.deleted-session-list li > div {
+  flex: 1;
+  min-width: 0;
+}
+.deleted-session-list strong {
+  display: block;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.deleted-session-list span {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.restore-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 9px 12px;
+  border: 1px solid #cad5e7;
+  border-radius: 7px;
+  font-size: 14px;
+  color: #315b94;
+  background: #f3f6fc;
+}
+.restore-button:hover:not(:disabled) {
+  background: #e6edf9;
+}
+.session-dialog .trash-empty {
+  padding: 24px 0;
+  text-align: center;
+  color: var(--muted);
+}
+@media (hover: none) {
+  .session-delete {
+    opacity: 1;
   }
 }

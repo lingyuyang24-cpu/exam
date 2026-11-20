@@ -24,7 +24,7 @@ class Store:
             PRAGMA journal_mode=WAL;
             CREATE TABLE IF NOT EXISTS sessions (
                 id TEXT PRIMARY KEY, title TEXT NOT NULL, cli_session_id TEXT,
-                created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+                created_at TEXT NOT NULL, updated_at TEXT NOT NULL, deleted_at TEXT
             );
             CREATE TABLE IF NOT EXISTS messages (
                 id TEXT PRIMARY KEY, session_id TEXT NOT NULL REFERENCES sessions(id),
@@ -52,6 +52,10 @@ class Store:
                 created_at TEXT NOT NULL
             );
             """)
+            # Existing data volumes are upgraded without touching conversation data.
+            columns = {row["name"] for row in db.execute("PRAGMA table_info(sessions)")}
+            if "deleted_at" not in columns:
+                db.execute("ALTER TABLE sessions ADD COLUMN deleted_at TEXT")
 
     @contextmanager
     def connect(self):
@@ -78,21 +82,43 @@ class Store:
 
     def create_session(self, title):
         sid, stamp = uid(), now()
-        self.execute("INSERT INTO sessions VALUES (?, ?, NULL, ?, ?)", (sid, title, stamp, stamp))
+        self.execute("INSERT INTO sessions(id,title,created_at,updated_at) VALUES (?, ?, ?, ?)", (sid, title, stamp, stamp))
         return self.one("SELECT * FROM sessions WHERE id=?", (sid,))
 
-    def sessions(self):
-        return self.all("""SELECT s.*,
+    def sessions(self, deleted=False):
+        condition = "IS NOT NULL" if deleted else "IS NULL"
+        return self.all(f"""SELECT s.*,
             (SELECT status FROM runs WHERE session_id=s.id ORDER BY created_at DESC LIMIT 1) AS status,
             (SELECT content FROM messages WHERE session_id=s.id AND role='user'
                 ORDER BY created_at DESC LIMIT 1) AS preview,
             (SELECT COUNT(*) FROM messages WHERE session_id=s.id) AS message_count
-            FROM sessions s ORDER BY updated_at DESC""")
+            FROM sessions s WHERE s.deleted_at {condition}
+            ORDER BY COALESCE(s.deleted_at,s.updated_at) DESC""")
+
+    def set_session_deleted(self, sid, deleted):
+        """Deletion and enqueue serialize on the same SQLite write lock."""
+        with self.connect() as db:
+            db.execute("BEGIN IMMEDIATE")
+            session = db.execute("SELECT * FROM sessions WHERE id=?", (sid,)).fetchone()
+            if not session:
+                raise LookupError("会话不存在")
+            if deleted and db.execute(
+                "SELECT id FROM runs WHERE session_id=? AND status IN ('queued','running')", (sid,)
+            ).fetchone():
+                raise ValueError("会话中还有任务在执行，请先停止任务再删除。")
+            if bool(session["deleted_at"]) != deleted:
+                stamp = now()
+                db.execute("UPDATE sessions SET deleted_at=?,updated_at=? WHERE id=?",
+                           (stamp if deleted else None, stamp, sid))
+            return dict(db.execute("SELECT * FROM sessions WHERE id=?", (sid,)).fetchone())
 
     def enqueue(self, sid, request_id, prompt):
         """Idempotency lookup and active-run exclusion happen in one transaction."""
         with self.connect() as db:
             db.execute("BEGIN IMMEDIATE")
+            session = db.execute("SELECT deleted_at FROM sessions WHERE id=?", (sid,)).fetchone()
+            if not session or session["deleted_at"]:
+                raise LookupError("会话不存在或已删除")
             old = db.execute("SELECT * FROM runs WHERE session_id=? AND request_id=?", (sid, request_id)).fetchone()
             if old:
                 return dict(old), False

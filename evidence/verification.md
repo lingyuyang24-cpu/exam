@@ -28,3 +28,12 @@
 - 最终镜像构建记录见 [docker-build-final.txt](docker-build-final.txt)，`/healthz` 为 `status=ok, configured=true, cli_available=true`。浏览器重启刷新后控制台无 error，截图见 [最终开发成果](screenshots/06-final-code-delivery.jpg)。
 
 所有真实任务均通过应用 API 调用实际 Codex CLI 和平台模型。自动测试的 16 项应用测试使用显式测试替身；真实代码成果的 9 / 21 项测试直接执行模型生成的代码，两者不混用。
+
+## 会话管理与文字可读性更新（2026-11-20）
+
+- 正文、用户消息和输入文字统一为 `#172033`，辅助文字为 `#56647a`；深色侧栏的标题和摘要使用更亮的文字。浏览器检查确认正文和输入区为 16px，见 [更新后工作台](screenshots/07-readable-workspace.jpg)。
+- 左侧会话新增删除按钮和确认弹窗，底部提供“已删除会话”恢复入口。删除为可恢复删除，保留聊天、CLI 上下文、工作材料和成果；不释放磁盘空间。
+- 应用测试现为 **20 项通过**；新增删除/恢复、恢复后续接、排队及执行中保护、旧数据库迁移验证。记录见 [session-management-tests.txt](session-management-tests.txt)，使用进程测试替身，没有调用模型 API。
+- Docker 生产构建成功（包含 Vite 构建），新版容器健康检查返回 `status=ok, configured=true, cli_available=true`。升级前使用 SQLite backup 保存数据库，升级后逐行比较原有字段：6 个会话、16 条消息、9 次任务、7 份成果记录均未变化。
+- 浏览器使用单独新建的“界面验证 · 删除恢复”会话验证：取消不删除、确认后列表移除、刷新后仍在恢复列表、恢复后材料内容可预览。验证会话最终留在可恢复列表，原有会话没有被删除。
+- 已检查桌面 1366×900 和手机 390×844；弹窗可容纳内容，取消按钮默认聚焦，Escape 可关闭，浏览器控制台无 error。截图见 [删除确认](screenshots/08-delete-confirmation.jpg)、[手机恢复列表](screenshots/09-mobile-recovery.jpg)。

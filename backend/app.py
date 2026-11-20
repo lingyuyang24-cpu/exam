@@ -60,7 +60,7 @@ def create_app(settings=None):
 
     def session_or_404(sid):
         session = store.one("SELECT * FROM sessions WHERE id=?", (sid,))
-        if not session:
+        if not session or session["deleted_at"]:
             raise HTTPException(404, "会话不存在")
         return session
 
@@ -68,6 +68,7 @@ def create_app(settings=None):
         run = store.one("SELECT * FROM runs WHERE id=?", (rid,))
         if not run:
             raise HTTPException(404, "任务不存在")
+        session_or_404(run["session_id"])
         return run
 
     def workspace(sid):
@@ -95,8 +96,8 @@ def create_app(settings=None):
                 "upload_extensions": sorted(UPLOAD_EXTENSIONS), "sandbox": settings.sandbox}
 
     @app.get("/api/sessions")
-    async def sessions():
-        return store.sessions()
+    async def sessions(deleted: bool = False):
+        return store.sessions(deleted=deleted)
 
     @app.post("/api/sessions", status_code=201)
     async def create_session(data: SessionInput):
@@ -109,6 +110,22 @@ def create_app(settings=None):
         session_or_404(sid)
         store.execute("UPDATE sessions SET title=?,updated_at=? WHERE id=?", (data.title.strip() or "新会话", now(), sid))
         return session_or_404(sid)
+
+    def change_deleted(sid, deleted):
+        try:
+            return store.set_session_deleted(sid, deleted)
+        except LookupError as exc:
+            raise HTTPException(404, str(exc))
+        except ValueError as exc:
+            raise HTTPException(409, str(exc))
+
+    @app.delete("/api/sessions/{sid}")
+    async def delete_session(sid: str):
+        return change_deleted(sid, True)
+
+    @app.post("/api/sessions/{sid}/restore")
+    async def restore_session(sid: str):
+        return change_deleted(sid, False)
 
     @app.get("/api/sessions/{sid}")
     async def session_detail(sid: str):
@@ -128,6 +145,8 @@ def create_app(settings=None):
             raise HTTPException(503, "Agent CLI 未安装，请使用 Docker 启动或安装指定版本的 Codex CLI。")
         try:
             run, created = store.enqueue(sid, data.request_id, data.content.strip())
+        except LookupError as exc:
+            raise HTTPException(404, str(exc))
         except ValueError as exc:
             raise HTTPException(409, str(exc))
         if created:
@@ -233,6 +252,7 @@ def create_app(settings=None):
         artifact = store.one("SELECT * FROM artifacts WHERE id=?", (aid,))
         if not artifact:
             raise HTTPException(404, "成果不存在")
+        session_or_404(artifact["session_id"])
         try:
             file = safe_path(settings.data_dir, artifact["relative_path"])
         except (ValueError, FileNotFoundError):

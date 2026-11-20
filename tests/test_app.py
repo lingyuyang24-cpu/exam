@@ -1,4 +1,5 @@
 import json
+import sqlite3
 import time
 import zipfile
 from io import BytesIO
@@ -235,3 +236,79 @@ def test_provider_errors_are_readable_and_redacted(client, settings):
     from backend.config import readable_error
     nested=json.dumps({'error':{'message':json.dumps({'error':{'message':'仅支持客户端工具'}})}})
     assert readable_error(nested)=='仅支持客户端工具'
+
+
+def test_delete_restore_preserves_history_files_and_continuation(client, settings):
+    sid, other = session(client), session(client)
+    uploaded = client.post(f'/api/sessions/{sid}/uploads', files={'file':('notes.txt',b'keep this material')}).json()
+    run = send(client, sid).json()
+    assert finished(client, run['id'])['status'] == 'succeeded'
+    before = client.get(f'/api/sessions/{sid}').json()
+    aid = before['artifacts'][0]['id']
+    archive = client.get(f'/api/artifacts/{aid}/download').content
+
+    deleted = client.delete(f'/api/sessions/{sid}')
+    assert deleted.status_code == 200 and deleted.json()['deleted_at']
+    assert client.delete(f'/api/sessions/{sid}').json()['deleted_at'] == deleted.json()['deleted_at']
+    assert [s['id'] for s in client.get('/api/sessions').json()] == [other]
+    assert [s['id'] for s in client.get('/api/sessions?deleted=true').json()] == [sid]
+    for path in [f'/api/sessions/{sid}', f'/api/sessions/{sid}/files',
+                 f'/api/sessions/{sid}/file?path={uploaded["path"]}',
+                 f'/api/sessions/{sid}/download?path={uploaded["path"]}',
+                 f'/api/runs/{run["id"]}', f'/api/runs/{run["id"]}/trace',
+                 f'/api/runs/{run["id"]}/events', f'/api/artifacts/{aid}/download']:
+        assert client.get(path).status_code == 404
+    assert send(client, sid, request_id='deleted-session-message').status_code == 404
+    assert client.patch(f'/api/sessions/{sid}', json={'title':'hidden'}).status_code == 404
+    assert client.post(f'/api/sessions/{sid}/uploads', files={'file':('new.txt',b'x')}).status_code == 404
+    with pytest.raises(LookupError):
+        client.app.state.store.enqueue(sid, 'direct-after-delete', 'blocked')
+
+    # The recycle bin and all data survive a fresh application instance.
+    with TestClient(create_app(settings)) as restarted:
+        assert restarted.get('/api/sessions?deleted=true').json()[0]['id'] == sid
+        assert restarted.post(f'/api/sessions/{sid}/restore').status_code == 200
+    restored = client.get(f'/api/sessions/{sid}').json()
+    assert restored['messages'] == before['messages']
+    assert restored['session']['cli_session_id'] == before['session']['cli_session_id']
+    assert client.get(f'/api/artifacts/{aid}/download').content == archive
+    assert client.get(f'/api/sessions/{sid}/download', params={'path':uploaded['path']}).content == b'keep this material'
+    assert client.get('/api/sessions?deleted=true').json() == []
+    continued = send(client, sid, request_id='restored-continuation').json()
+    assert finished(client, continued['id'])['status'] == 'succeeded'
+    assert client.get(f'/api/sessions/{sid}/file',params={'path':'outputs/result.txt'}).json()['content'] == 'continued'
+
+
+@pytest.mark.parametrize('status', ['queued', 'running'])
+def test_active_session_cannot_be_deleted(settings, status):
+    app = create_app(settings)
+    # Without lifespan the dispatcher stays off, so both states are deterministic.
+    client = TestClient(app)
+    try:
+        sid = session(client)
+        run = send(client, sid).json()
+        app.state.store.execute('UPDATE runs SET status=? WHERE id=?', (status, run['id']))
+        result = client.delete(f'/api/sessions/{sid}')
+        assert result.status_code == 409 and '先停止' in result.json()['detail']
+        assert client.get(f'/api/sessions/{sid}').status_code == 200
+        assert not client.get('/api/sessions?deleted=true').json()
+        assert client.delete('/api/sessions/not-found').status_code == 404
+        assert client.post('/api/sessions/not-found/restore').status_code == 404
+    finally:
+        client.close()
+
+
+def test_old_session_schema_is_migrated_without_data_loss(tmp_path):
+    path = tmp_path/'legacy.db'
+    with sqlite3.connect(path) as db:
+        db.execute('CREATE TABLE sessions (id TEXT PRIMARY KEY,title TEXT NOT NULL,cli_session_id TEXT,created_at TEXT NOT NULL,updated_at TEXT NOT NULL)')
+        db.execute('INSERT INTO sessions VALUES(?,?,?,?,?)', ('legacy','历史会话','original-cli-thread',now(),now()))
+    store = Store(path)
+    assert store.sessions()[0]['deleted_at'] is None
+    store.set_session_deleted('legacy', True)
+    store = Store(path)  # Repeated startup must not reset the deletion marker.
+    assert store.sessions() == []
+    assert store.sessions(deleted=True)[0]['cli_session_id'] == 'original-cli-thread'
+    store.set_session_deleted('legacy', False)
+    assert store.sessions()[0]['title'] == '历史会话'
+    assert store.create_session('新会话')['deleted_at'] is None

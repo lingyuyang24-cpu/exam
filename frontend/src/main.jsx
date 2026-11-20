@@ -36,6 +36,8 @@ import {
   BookOpen,
   Copy,
   CheckCheck,
+  Trash2,
+  RotateCcw,
 } from "lucide-react";
 import "./style.css";
 
@@ -291,6 +293,12 @@ function App() {
     [settingsOpen, setSettingsOpen] = useState(false),
     [editing, setEditing] = useState(false),
     [title, setTitle] = useState("");
+  const [deleteTarget, setDeleteTarget] = useState(null),
+    [trashOpen, setTrashOpen] = useState(false),
+    [deletedSessions, setDeletedSessions] = useState([]),
+    [trashLoading, setTrashLoading] = useState(false),
+    [sessionActionBusy, setSessionActionBusy] = useState(false),
+    [sessionActionError, setSessionActionError] = useState("");
   const inputRef = useRef(),
     uploadRef = useRef(),
     bottomRef = useRef(),
@@ -329,7 +337,8 @@ function App() {
     setError("");
     setDraft(drafts.current[sid] || "");
     requestId.current = null;
-    localStorage.setItem("agent-desk-session", sid);
+    if (sid) localStorage.setItem("agent-desk-session", sid);
+    else localStorage.removeItem("agent-desk-session");
   }, []);
   const newSession = useCallback(async () => {
     try {
@@ -417,7 +426,7 @@ function App() {
   }, [activeRun?.id, loadDetail, loadSessions]);
 
   async function send() {
-    if (!draft.trim() || busy || activeRun) return;
+    if (!selected || !draft.trim() || busy || activeRun) return;
     if (!ready) {
       setSettingsOpen(true);
       return;
@@ -498,6 +507,55 @@ function App() {
       setError(e.message);
     }
   }
+  async function deleteSession() {
+    if (!deleteTarget || sessionActionBusy) return;
+    const sid = deleteTarget.id;
+    setSessionActionBusy(true);
+    setSessionActionError("");
+    try {
+      await api(`/api/sessions/${sid}`, { method: "DELETE" });
+      const rows = await loadSessions();
+      if (selectedRef.current === sid) {
+        selectSession(rows[0]?.id || null);
+        if (!rows.length) await newSession();
+      }
+      delete drafts.current[sid];
+      setDeleteTarget(null);
+      setToast("会话已删除，可在「已删除会话」中恢复");
+    } catch (e) {
+      setSessionActionError(e.message);
+    } finally {
+      setSessionActionBusy(false);
+    }
+  }
+  async function openTrash() {
+    setTrashOpen(true);
+    setTrashLoading(true);
+    setSessionActionError("");
+    try {
+      setDeletedSessions(await api("/api/sessions?deleted=true"));
+    } catch (e) {
+      setSessionActionError(e.message);
+    } finally {
+      setTrashLoading(false);
+    }
+  }
+  async function restoreSession(sid) {
+    if (sessionActionBusy) return;
+    setSessionActionBusy(true);
+    setSessionActionError("");
+    try {
+      await api(`/api/sessions/${sid}/restore`, { method: "POST" });
+      await loadSessions();
+      setTrashOpen(false);
+      selectSession(sid);
+      setToast("会话已恢复，聊天记录和文件仍在");
+    } catch (e) {
+      setSessionActionError(e.message);
+    } finally {
+      setSessionActionBusy(false);
+    }
+  }
   const lastLiveMessage = (traces[activeRun?.id] || [])
     .filter((e) => e.type === "agent.message")
     .at(-1)?.payload.text;
@@ -536,32 +594,52 @@ function App() {
         </div>
         <nav className="session-list" aria-label="会话列表">
           {displayed.map((s) => (
-            <button
-              className={`session ${selected === s.id ? "selected" : ""}`}
+            <div
+              className={`session-row ${selected === s.id ? "selected" : ""}`}
               key={s.id}
-              onClick={() => selectSession(s.id)}
             >
-              <MessageSquare size={16} />
-              <div>
-                <strong>{s.title}</strong>
-                <span>
-                  {ACTIVE.has(s.status)
-                    ? STATUS[s.status]
-                    : s.preview
-                      ? s.preview.slice(0, 26)
-                      : "准备开始新的工作"}
-                </span>
-              </div>
-              {ACTIVE.has(s.status) && (
-                <LoaderCircle size={13} className="spin" />
-              )}
-            </button>
+              <button
+                className={`session ${selected === s.id ? "selected" : ""}`}
+                onClick={() => selectSession(s.id)}
+              >
+                <MessageSquare size={16} />
+                <div>
+                  <strong>{s.title}</strong>
+                  <span>
+                    {ACTIVE.has(s.status)
+                      ? STATUS[s.status]
+                      : s.preview
+                        ? s.preview.slice(0, 26)
+                        : "准备开始新的工作"}
+                  </span>
+                </div>
+                {ACTIVE.has(s.status) && (
+                  <LoaderCircle size={13} className="spin" />
+                )}
+              </button>
+              <button
+                className="session-delete"
+                aria-label={`删除会话：${s.title}`}
+                title={ACTIVE.has(s.status) ? "请先停止任务再删除" : "删除会话"}
+                disabled={ACTIVE.has(s.status)}
+                onClick={() => {
+                  setSessionActionError("");
+                  setDeleteTarget(s);
+                }}
+              >
+                <Trash2 size={15} />
+              </button>
+            </div>
           ))}
           {!displayed.length && (
             <p className="sidebar-empty">没有找到相关会话</p>
           )}
         </nav>
         <div className="sidebar-bottom">
+          <button className="trash-link" onClick={openTrash}>
+            <Trash2 size={16} />
+            已删除会话
+          </button>
           <div className="workspace-label">
             <span className="workspace-avatar">W</span>
             <div>
@@ -1008,6 +1086,96 @@ function App() {
           {toast}
         </div>
       )}
+      {deleteTarget && (
+        <SessionDialog
+          label="删除会话"
+          busy={sessionActionBusy}
+          onClose={() => setDeleteTarget(null)}
+        >
+          <header>
+            <h2>删除会话</h2>
+          </header>
+          <p className="delete-session-name">“{deleteTarget.title}”</p>
+          <p>
+            会话将从左侧列表移除。聊天记录、文件和成果会保留，可在“已删除会话”中恢复。
+          </p>
+          <p className="dialog-note">未发送的草稿将清空。</p>
+          {sessionActionError && (
+            <p className="dialog-error" role="alert">
+              {sessionActionError}
+            </p>
+          )}
+          <footer className="dialog-actions">
+            <button
+              className="dialog-cancel"
+              autoFocus
+              disabled={sessionActionBusy}
+              onClick={() => setDeleteTarget(null)}
+            >
+              取消
+            </button>
+            <button
+              className="dialog-danger"
+              disabled={sessionActionBusy}
+              onClick={deleteSession}
+            >
+              {sessionActionBusy ? "正在删除…" : "确认删除"}
+            </button>
+          </footer>
+        </SessionDialog>
+      )}
+      {trashOpen && (
+        <SessionDialog
+          label="已删除会话"
+          busy={sessionActionBusy}
+          onClose={() => setTrashOpen(false)}
+        >
+          <header>
+            <h2>已删除会话</h2>
+            <button
+              className="icon-button"
+              aria-label="关闭已删除会话"
+              disabled={sessionActionBusy}
+              onClick={() => setTrashOpen(false)}
+            >
+              <X size={20} />
+            </button>
+          </header>
+          <p>恢复后，聊天记录、文件和成果会回到工作台。</p>
+          {sessionActionError && (
+            <p className="dialog-error" role="alert">
+              {sessionActionError}
+            </p>
+          )}
+          {trashLoading ? (
+            <p role="status">正在加载…</p>
+          ) : deletedSessions.length ? (
+            <ul className="deleted-session-list">
+              {deletedSessions.map((s) => (
+                <li key={s.id}>
+                  <div>
+                    <strong>{s.title}</strong>
+                    <span>
+                      {new Date(s.deleted_at).toLocaleString("zh-CN")} 删除
+                    </span>
+                  </div>
+                  <button
+                    className="restore-button"
+                    aria-label={`恢复会话：${s.title}`}
+                    disabled={sessionActionBusy}
+                    onClick={() => restoreSession(s.id)}
+                  >
+                    <RotateCcw size={15} />
+                    恢复
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="trash-empty">暂无已删除会话</p>
+          )}
+        </SessionDialog>
+      )}
       {preview && (
         <div className="modal-backdrop" onClick={() => setPreview(null)}>
           <section
@@ -1129,7 +1297,10 @@ function App() {
           </section>
         </div>
       )}
-      <KeyboardShortcut onNew={newSession} />
+      <KeyboardShortcut
+        onNew={newSession}
+        disabled={!!deleteTarget || trashOpen}
+      />
     </div>
   );
 }
@@ -1150,17 +1321,41 @@ function FileRow({ file, onOpen }) {
     </button>
   );
 }
-function KeyboardShortcut({ onNew }) {
+function SessionDialog({ label, busy, onClose, children }) {
+  const dialogRef = useRef(null);
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    dialog.showModal();
+    return () => dialog.close();
+  }, []);
+  return (
+    <dialog
+      ref={dialogRef}
+      className="session-dialog"
+      aria-label={label}
+      onCancel={(e) => {
+        e.preventDefault();
+        if (!busy) onClose();
+      }}
+      onClick={(e) => {
+        if (e.target === dialogRef.current && !busy) onClose();
+      }}
+    >
+      <div className="session-dialog-content">{children}</div>
+    </dialog>
+  );
+}
+function KeyboardShortcut({ onNew, disabled }) {
   useEffect(() => {
     const handler = (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+      if (!disabled && (e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         onNew();
       }
     };
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
-  }, [onNew]);
+  }, [onNew, disabled]);
   return null;
 }
 createRoot(document.getElementById("root")).render(<App />);
