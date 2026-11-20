@@ -1,0 +1,2 @@
+workspace write: allowed
+outside workspace write: blocked

@@ -1,0 +1,14 @@
+{
+  "health": {
+    "status": "ok",
+    "configured": false,
+    "cli_available": true
+  },
+  "session_id": "fa76da51-f3bb-4dec-ab12-704ebfd55b6e",
+  "file": {
+    "name": "verification.txt",
+    "path": "uploads/6be0aee4_verification.txt",
+    "size": 43
+  },
+  "sha256": "0dd45a369a467550e6c00e78127d1dc7677edc4bc0396f13d742bcf295a8b025"
+}

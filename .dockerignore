@@ -1,0 +1,12 @@
+.git
+.env
+.env.*
+.venv
+**/node_modules
+.pnpm-store
+**/__pycache__
+.pytest_cache
+data
+.idea
+evidence/private
+frontend/dist
