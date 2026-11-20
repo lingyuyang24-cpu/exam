@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-20",
+  "environment": "Local Vite browser component fixture; no model API calls",
+  "checks": {
+    "queuedHidden": true,
+    "ticks": [
+      {
+        "at": 1795186044569,
+        "text": "0 秒"
+      },
+      {
+        "at": 1795186045417,
+        "text": "1 秒"
+      },
+      {
+        "at": 1795186046372,
+        "text": "2 秒"
+      },
+      {
+        "at": 1795186047416,
+        "text": "3 秒"
+      }
+    ],
+    "minuteRollover": [
+      "58 秒",
+      "59 秒",
+      "1 分 0 秒"
+    ],
+    "completedAt": "1 分 0 秒",
+    "completedLater": "1 分 0 秒",
+    "cancelledAt": "1 秒",
+    "cancelledLater": "1 秒",
+    "remountStarted": 1795186087834,
+    "remount": {
+      "display": "22 秒",
+      "expectedSeconds": 22
+    },
+    "queuedAfterRunningHidden": true,
+    "consoleErrors": []
+  }
+}

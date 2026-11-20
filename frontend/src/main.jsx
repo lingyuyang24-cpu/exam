@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import RunElapsed from "./RunElapsed.jsx";
 import {
   Layers3,
   Plus,
@@ -152,15 +153,6 @@ function Trace({ run, events, onLoad }) {
   const logs = (events || []).filter((e) =>
     ["diagnostic", "error", "warning"].includes(e.type),
   );
-  const elapsed = run.started_at
-    ? Math.max(
-        0,
-        Math.round(
-          (new Date(run.finished_at || Date.now()) - new Date(run.started_at)) /
-            1000,
-        ),
-      )
-    : 0;
   return (
     <div className={`trace status-${run.status}`}>
       <button
@@ -180,13 +172,7 @@ function Trace({ run, events, onLoad }) {
               ? "等待可用执行位"
               : "Agent 工作记录"}
         </span>
-        {elapsed > 0 && (
-          <span className="elapsed">
-            {elapsed < 60
-              ? `${elapsed} 秒`
-              : `${Math.floor(elapsed / 60)} 分 ${elapsed % 60} 秒`}
-          </span>
-        )}
+        <RunElapsed run={run} />
         {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
       </button>
       {run.error && (

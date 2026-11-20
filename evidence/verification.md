@@ -37,3 +37,11 @@
 - Docker 生产构建成功（包含 Vite 构建），新版容器健康检查返回 `status=ok, configured=true, cli_available=true`。升级前使用 SQLite backup 保存数据库，升级后逐行比较原有字段：6 个会话、16 条消息、9 次任务、7 份成果记录均未变化。
 - 浏览器使用单独新建的“界面验证 · 删除恢复”会话验证：取消不删除、确认后列表移除、刷新后仍在恢复列表、恢复后材料内容可预览。验证会话最终留在可恢复列表，原有会话没有被删除。
 - 已检查桌面 1366×900 和手机 390×844；弹窗可容纳内容，取消按钮默认聚焦，Escape 可关闭，浏览器控制台无 error。截图见 [删除确认](screenshots/08-delete-confirmation.jpg)、[手机恢复列表](screenshots/09-mobile-recovery.jpg)。
+
+## 执行时长刷新修复（2026-11-20）
+
+- 原因：时长在任务卡渲染时计算，依赖 4 秒轮询或新事件触发，未独立计时。
+- 改为独立的 `RunElapsed` 组件，每秒按实际时间计算；页面重新获得焦点或可见时校准，任务结束或离开会话时清理计时器。结束时固定使用服务端 `finished_at`，不增加 API 请求，也不让整块执行记录每秒重新渲染。
+- 浏览器回归使用 `frontend/tests/run-elapsed.html`，父组件无轮询，未调用模型 API。实际观察 0→1→2→3 秒、58→59→1 分 0 秒；完成和停止后显示不再增长；卸载 22 秒后重新挂载显示 22 秒；排队状态不显示执行时长，控制台无 error。机器可读结果见 [elapsed-timer-verification.json](elapsed-timer-verification.json)。
+- 复现方式：在 `frontend` 目录执行 `pnpm dev`，打开开发服务器的 `/tests/run-elapsed.html`。该夹具不进入生产构建。
+- Docker/Vite 生产构建成功，本地服务已更新，真实历史任务使用新组件显示固定时长。截图见 [任务时长](screenshots/10-task-timer.jpg)。
